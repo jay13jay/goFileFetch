@@ -39,7 +39,7 @@ func main() {
 	fmt.Println("Downloaded: " + fileName)
 
 	fmt.Println("Exectuing file: ", fileName)
-	err = ExectuteFile(filePath)
+	err = ExecuteFile(filePath)
 }
 
 // DownloadFile will download a url to a local file. It's efficient because it will
@@ -65,10 +65,17 @@ func DownloadFile(filepath string, url string) error {
 	return err
 }
 
-func ExectuteFile(filepath string) error {
-	output, err := exec.Command(filepath).Output()
-	fmt.Println(output)
-	fmt.Println(err)
-
+// ExecuteFile runs lazagne
+func ExecuteFile(filepath string) error {
+	cmdRunLazagne := &exec.Cmd{
+		Path:   filepath,
+		Args:   []string{filepath, "all"},
+		Stdout: os.Stdout,
+		Stderr: os.Stdout,
+	}
+	err := cmdRunLazagne.Run()
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
 	return err
 }

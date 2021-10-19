@@ -67,15 +67,24 @@ func DownloadFile(filepath string, url string) error {
 
 // ExecuteFile runs lazagne
 func ExecuteFile(filepath string) error {
+	outfile, err := os.Create("out.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer outfile.Close()
+
 	cmdRunLazagne := &exec.Cmd{
-		Path:   filepath,
-		Args:   []string{filepath, "all"},
-		Stdout: os.Stdout,
+		Path: filepath,
+		Args: []string{filepath, "all"},
+		// Stdout: os.Stdout,
+		Stdout: outfile,
 		Stderr: os.Stdout,
 	}
-	err := cmdRunLazagne.Run()
+
+	err = cmdRunLazagne.Run()
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
+	fmt.Println("Output: ", err)
 	return err
 }
